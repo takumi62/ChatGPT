@@ -89,6 +89,14 @@ const Home = ({ navigation }) => {
 
                 <TouchableOpacity
                     style={styles.btn}
+                    onPress={() => navigation.navigate('Medication')}
+                >
+                    <AntDesign name="plus" size={24} color={COLORS.white} />
+                    <Text style={styles.btnText}>Medicaiton Record</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.btn}
                     onPress={() => navigation.navigate('Chat')}
                 >
                     <AntDesign name="plus" size={24} color={COLORS.white} />
@@ -133,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         width: 300,
         paddingVertical: SIZES.padding * 2,
+        marginVertical: 10,
     },
     btnText: {
         ...FONTS.body3,

@@ -83,7 +83,7 @@ const BottomTabNavigation = () => {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <Ionicons
-                                name="ios-person-outline"
+                                name="person-outline"
                                 size={24}
                                 color={
                                     focused

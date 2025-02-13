@@ -5,5 +5,6 @@ import Register from './Register'
 import Profile from './Profile'
 import Saved from './Saved'
 import Welcome from './Welcome'
+import Medication from './Medication'
 
-export { Home, Chat, Login, Register, Profile, Saved, Welcome }
+export { Home, Chat, Login, Register, Profile, Saved, Welcome, Medication}

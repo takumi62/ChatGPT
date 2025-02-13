@@ -5,7 +5,7 @@ import { initializeApp } from 'firebase/app'
 
 export const getFirebaseApp = () => {
     const firebaseConfig = {
-        apiKey: 'AIzaSyBwYRO37_PzU_9Dks9iPL2xmFyJapGd-JY',
+        apiKey: 'AIzaSyAtZhFn5T2uxEqDG4SslSXGUCHdi4YQ2ys',
         authDomain: 'chat-gpt-2-1629b.firebaseapp.com',
         projectId: 'chat-gpt-2-1629b',
         storageBucket: 'chat-gpt-2-1629b.appspot.com',
