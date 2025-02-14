@@ -1,17 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, FONTS, SIZES } from '../constants'
-import { Ionicons, AntDesign } from '@expo/vector-icons'
-import { useTheme } from '../themes/ThemeProvider'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, FONTS, SIZES } from '../constants';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { useTheme } from '../themes/ThemeProvider';
 
 const Home = ({ navigation }) => {
-
     const { dark, colors, setScheme } = useTheme();
 
-    const ToggleTheme = ()=>{
-        dark ? setScheme('light') : setScheme('dark')
-    }
+    const ToggleTheme = () => {
+        dark ? setScheme('light') : setScheme('dark');
+    };
 
     return (
         <SafeAreaView
@@ -23,13 +22,11 @@ const Home = ({ navigation }) => {
             ]}
         >
             <View style={styles.center}>
-                <TouchableOpacity
-                 onPress={ToggleTheme}
-                >
+                <TouchableOpacity onPress={ToggleTheme}>
                     <Ionicons
-                        name={ dark ? 'sunny-outline': "partly-sunny-sharp"}
+                        name={dark ? 'sunny-outline' : 'partly-sunny-sharp'}
                         size={32}
-                        color={dark ? COLORS.white: COLORS.black}
+                        color={dark ? COLORS.white : COLORS.black}
                     />
                 </TouchableOpacity>
 
@@ -55,7 +52,7 @@ const Home = ({ navigation }) => {
                     ]}
                 >
                     <Text style={[styles.boxText, { color: colors.text }]}>
-                        "Explain quantum computings in simple terms"
+                        "Explain quantum computing in simple terms"
                     </Text>
                 </View>
                 <View
@@ -69,7 +66,7 @@ const Home = ({ navigation }) => {
                     ]}
                 >
                     <Text style={[styles.boxText, { color: colors.text }]}>
-                        "How To make an HTTP request in JavaScript ?"
+                        "How To make an HTTP request in JavaScript?"
                     </Text>
                 </View>
                 <View
@@ -83,16 +80,16 @@ const Home = ({ navigation }) => {
                     ]}
                 >
                     <Text style={[styles.boxText, { color: colors.text }]}>
-                        "Got any creative ideas for a 10 year old's birthday"
+                        "Got any creative ideas for a 10-year-old's birthday?"
                     </Text>
                 </View>
 
                 <TouchableOpacity
                     style={styles.btn}
-                    onPress={() => navigation.navigate('Medication')}
+                    onPress={() => navigation.navigate('CalendarScreen')}
                 >
                     <AntDesign name="plus" size={24} color={COLORS.white} />
-                    <Text style={styles.btnText}>Medicaiton Record</Text>
+                    <Text style={styles.btnText}>Calendar</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -102,10 +99,19 @@ const Home = ({ navigation }) => {
                     <AntDesign name="plus" size={24} color={COLORS.white} />
                     <Text style={styles.btnText}>New Chat</Text>
                 </TouchableOpacity>
+
+                {/* 新規作成ボタンを追加（SelectionScreen に遷移） */}
+                <TouchableOpacity
+                    style={styles.addButton}
+                    onPress={() => navigation.navigate('Selection')}
+                >
+                    <AntDesign name="pluscircleo" size={32} color={COLORS.primary} />
+                    <Text style={styles.addButtonText}>New creation</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     areaStyle: {
@@ -133,7 +139,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: COLORS.white,
     },
-
     btn: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -148,5 +153,16 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         marginLeft: 8,
     },
-})
-export default Home
+    addButton: {
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    addButtonText: {
+        ...FONTS.body3,
+        color: COLORS.primary,
+        marginTop: 5,
+    },
+});
+
+export default Home;

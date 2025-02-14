@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, TextInput, Image } from 'react-native'
+import { View, TouchableOpacity, TextInput, Image, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, SIZES, images } from '../constants'
@@ -10,13 +10,10 @@ import { useTheme } from '../themes/ThemeProvider'
 // Thanks for watching...
 const Chat = ({ navigation }) => {
     const [inputMessage, setInputMessage] = useState('')
-    const [outputMessage, setOutputMessage] = useState(
-        'Results should be shown here.'
-    )
+    const [outputMessage, setOutputMessage] = useState('Results should be shown here.')
     const [isTyping, setIsTyping] = useState(false)
-
     const [messages, setMessages] = useState([])
-    const {colors } = useTheme()
+    const { colors } = useTheme()
 
     const renderMessage = (props) => {
         const { currentMessage } = props
@@ -103,7 +100,6 @@ const Chat = ({ navigation }) => {
         /**
          * Always put your api key in an environment file
          */
-
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -140,7 +136,7 @@ const Chat = ({ navigation }) => {
             })
     }
 
-    // implementing images generations
+    // Implementing images generations
     const generateImages = () => {
         setIsTyping(true)
         const message = {
@@ -208,105 +204,109 @@ const Chat = ({ navigation }) => {
                 backgroundColor: colors.background,
             }}
         >
-            <StatusBar style="auto" />
-            <View
-                style={{
-                    height: 60,
-                    backgroundColor: colors.background,
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexDirection: 'row',
-                    paddingHorizontal: 22,
-                    width: SIZES.width,
-                    zIndex: 9999,
-                }}
-            >
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{
-                        height: 40,
-                        width: 40,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <MaterialIcons
-                        name="keyboard-arrow-left"
-                        size={24}
-                        color={colors.text}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('Save chat')}>
-                    <Ionicons
-                        name="bookmark-outline"
-                        size={24}
-                        color={colors.text}
-                    />
-                </TouchableOpacity>
-            </View>
-
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <GiftedChat
-                    messages={messages}
-                    renderInputToolbar={() => {}}
-                    user={{ _id: 1 }}
-                    minInputToolbarHeight={0}
-                    renderMessage={renderMessage}
-                    isTyping={isTyping}
-                />
-            </View>
-
-            <View
-                style={{
-                    flexDirection: 'row',
-                    backgroundColor: colors.background,
-                    paddingVertical: 8,
-                }}
-            >
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        marginLeft: 10,
-                        backgroundColor: colors.background,
-                        paddingVertical: 8,
-                        marginHorizontal: 12,
-                        borderRadius: 12,
-                        borderColor: colors.text,
-                        borderWidth: .2
-                    }}
-                >
-                    <TextInput
-                        value={inputMessage}
-                        onChangeText={handleInputText}
-                        placeholder="Enter your question"
-                        placeholderTextColor={colors.text}
+            {/* 背景タップでキーボードを閉じる */}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={{ flex: 1 }}>
+                    <StatusBar style="auto" />
+                    <View
                         style={{
-                            color: colors.text,
-                            flex: 1,
-                            paddingHorizontal: 10,
-                        }}
-                    />
-
-                    <TouchableOpacity
-                        onPress={submitHandler}
-                        style={{
-                            padding: 6,
-                            borderRadius: 8,
-                            marginHorizontal: 12,
+                            height: 60,
+                            backgroundColor: colors.background,
+                            top: 0,
+                            right: 0,
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexDirection: 'row',
+                            paddingHorizontal: 22,
+                            width: SIZES.width,
+                            zIndex: 9999,
                         }}
                     >
-                        <FontAwesome
-                            name="send-o"
-                            color={COLORS.primary}
-                            size={24}
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={{
+                                height: 40,
+                                width: 40,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <MaterialIcons
+                                name="keyboard-arrow-left"
+                                size={24}
+                                color={colors.text}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => console.log('Save chat')}>
+                            <Ionicons
+                                name="bookmark-outline"
+                                size={24}
+                                color={colors.text}
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <GiftedChat
+                            messages={messages}
+                            renderInputToolbar={() => {}}
+                            user={{ _id: 1 }}
+                            minInputToolbarHeight={0}
+                            renderMessage={renderMessage}
+                            isTyping={isTyping}
                         />
-                    </TouchableOpacity>
+                    </View>
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            backgroundColor: colors.background,
+                            paddingVertical: 8,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                marginLeft: 10,
+                                backgroundColor: colors.background,
+                                paddingVertical: 8,
+                                marginHorizontal: 12,
+                                borderRadius: 12,
+                                borderColor: colors.text,
+                                borderWidth: 0.2,
+                            }}
+                        >
+                            <TextInput
+                                value={inputMessage}
+                                onChangeText={handleInputText}
+                                placeholder="Enter your question"
+                                placeholderTextColor={colors.text}
+                                style={{
+                                    color: colors.text,
+                                    flex: 1,
+                                    paddingHorizontal: 10,
+                                }}
+                            />
+
+                            <TouchableOpacity
+                                onPress={submitHandler}
+                                style={{
+                                    padding: 6,
+                                    borderRadius: 8,
+                                    marginHorizontal: 12,
+                                }}
+                            >
+                                <FontAwesome
+                                    name="send-o"
+                                    color={COLORS.primary}
+                                    size={24}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         </SafeAreaView>
     )
 }
