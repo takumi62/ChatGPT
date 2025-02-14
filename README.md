@@ -6,7 +6,8 @@ LIFE is a **goal-setting and habit-tracking mobile application** built with **Re
 
 This project is inspired by [the original developer's project](https://github.com/originaldeveloper/ChatGPT-Clone) while adding new features tailored for structured goal management and habit formation.
 
-![LIFE App](https://i.ibb.co/RcNyyT6/chatgpt.png)
+![image](https://github.com/user-attachments/assets/f6d35f9d-da2c-4861-9a73-964dac9fa148)
+
 
 ## Features (Including Work in Progress)
 
