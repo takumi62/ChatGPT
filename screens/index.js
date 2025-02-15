@@ -7,8 +7,9 @@ import Saved from './Saved'
 import Welcome from './Welcome'
 import Medication from './Medication'
 import CalendarScreen from './CalendarScreen'
+import FullCalendarScreen from './FullCalendarScreen'
 import SelectionScreen from './SelectionScreen'
 import GoalSettingScreen from './GoalSettingScreen'
 import HabitSettingScreen from './HabitSettingScreen'
 
-export { Home, Chat, Login, Register, Profile, Saved, Welcome, Medication, CalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen }
+export { Home, Chat, Login, Register, Profile, Saved, Welcome, Medication, CalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen, FullCalendarScreen }
