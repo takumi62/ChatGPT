@@ -8,6 +8,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useTheme } from '../themes/ThemeProvider';
 
 const habits = [
   {
@@ -77,18 +78,21 @@ const CalendarScreen = ({ navigation }) => {
   const weekDays = getWeekDays(selectedDate);
   const headerMonth = selectedDate.toLocaleString('default', { month: 'short' });
   const headerDay = selectedDate.getDate();
+  const { colors } = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* ヘッダー */}
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Build Good Habits</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
+          Build Good Habits
+        </Text>
         <View style={styles.iconContainer}>
           <TouchableOpacity>
-            <Feather name="plus" size={22} color="black" />
+            <Feather name="plus" size={22} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Feather name="more-horizontal" size={22} color="black" />
+          <TouchableOpacity style={{ marginLeft: 16 }}>
+            <Feather name="more-horizontal" size={22} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -99,8 +103,10 @@ const CalendarScreen = ({ navigation }) => {
           style={styles.calendarHeader}
           onPress={() => navigation.navigate('FullCalendarScreen')}
         >
-          <Feather name="calendar" size={22} color="black" />
-          <Text style={styles.calendarDate}>{headerMonth} {headerDay}</Text>
+          <Feather name="calendar" size={22} color={colors.text} />
+          <Text style={[styles.calendarDate, { color: colors.text }]}>
+            {headerMonth} {headerDay}
+          </Text>
         </TouchableOpacity>
         <View style={styles.calendarStrip}>
           {weekDays.map((day) => {
@@ -109,10 +115,23 @@ const CalendarScreen = ({ navigation }) => {
             return (
               <TouchableOpacity
                 key={day.toISOString()}
-                style={[styles.dayItem, isSelected && styles.dayItemSelected]}
+                style={[
+                  styles.dayItem,
+                  { borderColor: colors.border },
+                  isSelected && {
+                    backgroundColor: colors.primary,
+                    borderColor: colors.primary
+                  }
+                ]}
                 onPress={() => setSelectedDate(day)}
               >
-                <Text style={[styles.dayText, isSelected && styles.dayTextSelected]}>
+                <Text
+                  style={[
+                    styles.dayText,
+                    { color: colors.text },
+                    isSelected && { color: colors.text, fontWeight: 'bold' }
+                  ]}
+                >
                   {dayNumber}
                 </Text>
               </TouchableOpacity>
@@ -123,20 +142,29 @@ const CalendarScreen = ({ navigation }) => {
 
       <ScrollView style={styles.content}>
         {/* Active Habits */}
-        <Text style={styles.sectionTitle}>Active Habits</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Active Habits</Text>
         {habits.map((habit) => (
-          <View key={habit.id} style={[styles.habitItem, { backgroundColor: habit.color + '15' }]}>
+          <View
+            key={habit.id}
+            style={[
+              styles.habitItem,
+              // habit.color + '15' は習慣カラーの薄い背景用
+              { backgroundColor: habit.color + '15' }
+            ]}
+          >
             <View style={styles.habitLeft}>
               <View style={[styles.habitColorDot, { backgroundColor: habit.color }]} />
               <View style={styles.habitTextContainer}>
-                <Text style={styles.habitTitle}>{habit.title}</Text>
+                <Text style={[styles.habitTitle, { color: colors.text }]}>{habit.title}</Text>
                 {habit.time ? (
-                  <Text style={styles.habitTime}>{habit.time}</Text>
+                  <Text style={[styles.habitTime, { color: colors.textSecondary || colors.text }]}>
+                    {habit.time}
+                  </Text>
                 ) : null}
               </View>
             </View>
             {habit.progress !== undefined && (
-              <Text style={styles.habitProgress}>
+              <Text style={[styles.habitProgress, { color: colors.text }]}>
                 {habit.progress} / {habit.pace}
               </Text>
             )}
@@ -144,16 +172,26 @@ const CalendarScreen = ({ navigation }) => {
         ))}
 
         {/* Goals */}
-        <Text style={styles.sectionTitle}>Goals</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Goals</Text>
         {goals.map((goal) => (
-          <View key={goal.id} style={styles.goalItem}>
+          <View
+            key={goal.id}
+            style={[
+              styles.goalItem,
+              { backgroundColor: colors.card }
+            ]}
+          >
             <View style={styles.goalLeft}>
-              <Text style={styles.goalTitle}>{goal.title}</Text>
-              <Text style={styles.goalDifficulty}>
+              <Text style={[styles.goalTitle, { color: colors.text }]}>
+                {goal.title}
+              </Text>
+              <Text style={[styles.goalDifficulty, { color: colors.textSecondary || colors.text }]}>
                 Difficulty: {goal.difficulty}★
               </Text>
             </View>
-            <Text style={styles.goalProgress}>{goal.progress}%</Text>
+            <Text style={[styles.goalProgress, { color: colors.text }]}>
+              {goal.progress}%
+            </Text>
           </View>
         ))}
       </ScrollView>
@@ -163,8 +201,7 @@ const CalendarScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF'
+    flex: 1
   },
   headerContainer: {
     flexDirection: 'row',
@@ -180,10 +217,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: 'row'
   },
-  iconText: {
-    fontSize: 18,
-    marginLeft: 12
-  },
   calendarStripContainer: {
     paddingHorizontal: 16,
     marginTop: 20
@@ -193,13 +226,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10
   },
-  calendarIcon: {
-    fontSize: 20,
-    marginRight: 8
-  },
   calendarDate: {
     fontSize: 16,
-    fontWeight: '500'
+    fontWeight: '500',
+    marginLeft: 6
   },
   calendarStrip: {
     flexDirection: 'row',
@@ -210,21 +240,11 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#ccc',
     alignItems: 'center',
     justifyContent: 'center'
   },
-  dayItemSelected: {
-    backgroundColor: '#000',
-    borderColor: '#000'
-  },
   dayText: {
-    fontSize: 16,
-    color: '#888'
-  },
-  dayTextSelected: {
-    color: '#fff',
-    fontWeight: 'bold'
+    fontSize: 16
   },
   content: {
     flex: 1,
@@ -235,8 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 8,
-    marginTop: 16,
-    color: '#000'
+    marginTop: 16
   },
   habitItem: {
     flexDirection: 'row',
@@ -260,17 +279,14 @@ const styles = StyleSheet.create({
   },
   habitTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#000'
+    fontWeight: '500'
   },
   habitTime: {
-    fontSize: 12,
-    color: '#666'
+    fontSize: 12
   },
   habitProgress: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#000',
     position: 'absolute',
     right: 10,
     bottom: 10
@@ -279,7 +295,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F7F7',
     padding: 12,
     borderRadius: 12,
     marginBottom: 8
@@ -289,18 +304,15 @@ const styles = StyleSheet.create({
   },
   goalTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#000'
+    fontWeight: '500'
   },
   goalDifficulty: {
     fontSize: 12,
-    color: '#666',
     marginTop: 4
   },
   goalProgress: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#000'
+    fontWeight: '500'
   }
 });
 

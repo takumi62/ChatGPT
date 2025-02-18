@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Welcome, Login, Register, Home, Chat, Medication, CalendarScreen, FullCalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen } from '../screens'
+import { Welcome, Login, Register, Home, Chat, Medication, CalendarScreen, FullCalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen, GamifiedTaskmanager } from '../screens'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigation from './BottomTabNavigation'
 
@@ -91,6 +91,13 @@ const AppNavigation = () => {
                 <Stack.Screen
                     name="HabitSetting"
                     component={HabitSettingScreen}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="GamifiedTaskmanager"
+                    component={GamifiedTaskmanager}
                     options={{
                         headerShown: false,
                     }}

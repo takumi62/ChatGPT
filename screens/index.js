@@ -11,5 +11,6 @@ import FullCalendarScreen from './FullCalendarScreen'
 import SelectionScreen from './SelectionScreen'
 import GoalSettingScreen from './GoalSettingScreen'
 import HabitSettingScreen from './HabitSettingScreen'
+import GamifiedTaskmanager from './GamifiedTaskmanager'
 
-export { Home, Chat, Login, Register, Profile, Saved, Welcome, Medication, CalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen, FullCalendarScreen }
+export { Home, Chat, Login, Register, Profile, Saved, Welcome, Medication, CalendarScreen, SelectionScreen, GoalSettingScreen, HabitSettingScreen, FullCalendarScreen, GamifiedTaskmanager }

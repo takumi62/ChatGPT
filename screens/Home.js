@@ -83,6 +83,14 @@ const Home = ({ navigation }) => {
                         "Got any creative ideas for a 10-year-old's birthday?"
                     </Text>
                 </View>
+                
+                <TouchableOpacity
+                    style={styles.btn}
+                    onPress={() => navigation.navigate('GamifiedTaskmanager')}
+                >
+                    <AntDesign name="plus" size={24} color={COLORS.white} />
+                    <Text style={styles.btnText}>Profile</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.btn}

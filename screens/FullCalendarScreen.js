@@ -12,7 +12,6 @@ import { Calendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../themes/ThemeProvider';
 
-// カレンダー上のドット表示（色分け）サンプル
 const sampleMarkedDates = {
   '2025-02-01': { dots: [{ key: 'exercise', color: '#4CAF50' }] },
   '2025-02-02': { dots: [{ key: 'reading', color: '#2196F3' }, { key: 'diary', color: '#FF9800' }] },
@@ -20,7 +19,6 @@ const sampleMarkedDates = {
   '2025-02-04': { dots: [{ key: 'exercise', color: '#4CAF50' }, { key: 'reading', color: '#2196F3' }] }
 };
 
-// 日付に紐づくアクティビティのサンプル
 const dailyActivities = {
   '2025-02-01': [
     { title: 'Exercise', description: 'Training at the gym', color: '#4CAF50' }
@@ -45,12 +43,10 @@ const FullCalendarScreen = ({ navigation }) => {
   const today = new Date().toISOString().split('T')[0];
   const { colors } = useTheme();
 
-  // タップ時の処理 - カレンダー下部の表示のみ更新
   const handleDatePress = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  // 長押し時の処理 - モーダル表示
   const handleDateLongPress = (day) => {
     setSelectedDate(day.dateString);
     setBottomSheetVisible(true);
@@ -63,25 +59,41 @@ const FullCalendarScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        {/* react-native-calendars にテーマを適用 */}
         <Calendar
           style={styles.calendar}
           markingType="multi-dot"
           markedDates={sampleMarkedDates}
+          // カレンダーの色を theme prop で設定
+          theme={{
+            calendarBackground: colors.background,
+            textSectionTitleColor: colors.text,
+            dayTextColor: colors.text,
+            monthTextColor: colors.text,
+            arrowColor: colors.text,
+            // 以下は必要に応じて設定
+            textDisabledColor: '#808080',
+            todayTextColor: colors.text,
+          }}
           onDayPress={handleDatePress}
           dayComponent={({ date, state, marking }) => {
             const isToday = date.dateString === today;
             const isDisabled = state === 'disabled';
             return (
               <TouchableOpacity
-                style={[styles.dayContainer, isToday && styles.todayHighlight]}
+                style={[
+                  styles.dayContainer,
+                  isToday && { backgroundColor: colors.primary },
+                ]}
                 onLongPress={() => handleDateLongPress({ dateString: date.dateString })}
                 onPress={() => handleDatePress({ dateString: date.dateString })}
               >
                 <Text
                   style={[
                     styles.dayText,
-                    isToday && styles.todayText,
+                    { color: colors.text },
+                    isToday && { color: colors.text, fontWeight: 'bold' },
                     isDisabled && { color: '#ccc' }
                   ]}
                 >
@@ -99,19 +111,27 @@ const FullCalendarScreen = ({ navigation }) => {
           }}
         />
 
-        {/* カレンダー下部のアクティビティ表示（Habit表示部分） */}
+        {/* カレンダー下部のアクティビティ表示部分 */}
         <ScrollView style={styles.detailContainer}>
-          <Text style={styles.detailDateText}>{selectedDate || "Select a date"}</Text>
+          <Text style={[styles.detailDateText, { color: colors.text }]}>
+            {selectedDate || "Select a date"}
+          </Text>
           {activitiesForSelectedDay.length > 0 ? (
             activitiesForSelectedDay.map((activity, idx) => (
-              <View key={idx} style={[styles.habitItem, { backgroundColor: activity.color + '15' }]}>
+              <View
+                key={idx}
+                style={[
+                  styles.habitItem,
+                  { backgroundColor: activity.color + '15' }
+                ]}
+              >
                 <View style={styles.habitLeft}>
                   <View style={[styles.habitColorDot, { backgroundColor: activity.color }]} />
                   <View style={styles.habitTextContainer}>
-                    <Text style={[styles.habitTitle, { color: activity.color }]}>
+                    <Text style={[styles.habitTitle, { color: colors.text }]}>
                       {activity.title}
                     </Text>
-                    <Text style={styles.habitTime}>
+                    <Text style={[styles.habitTime, { color: colors.textSecondary || '#666' }]}>
                       {activity.description}
                     </Text>
                   </View>
@@ -119,12 +139,14 @@ const FullCalendarScreen = ({ navigation }) => {
               </View>
             ))
           ) : (
-            <Text style={styles.noActivityText}>no date</Text>
+            <Text style={[styles.noActivityText, { color: colors.textSecondary || '#666' }]}>
+              no date
+            </Text>
           )}
         </ScrollView>
       </View>
 
-      {/* Bottom Sheet（長押しで開く） */}
+      {/* Bottom Sheet（長押しで開くモーダル） */}
       <Modal
         key={selectedDate}
         animationType="slide"
@@ -137,30 +159,42 @@ const FullCalendarScreen = ({ navigation }) => {
           activeOpacity={1}
           onPress={() => setBottomSheetVisible(false)}
         >
-          <View style={styles.bottomSheetContainer}>
-            <Text style={styles.bottomSheetDateText}>{selectedDate}</Text>
+          <View style={[styles.bottomSheetContainer, { backgroundColor: colors.background}]}>
+            <Text style={[styles.bottomSheetDateText, { color: colors.text }]}>
+              {selectedDate}
+            </Text>
             {activitiesForSelectedDay.length > 0 ? (
               activitiesForSelectedDay.map((activity, idx) => (
-                <View key={idx} style={[styles.habitItem, { backgroundColor: activity.color + '15' }]}>
+                <View
+                  key={idx}
+                  style={[
+                    styles.habitItem,
+                    { backgroundColor: activity.color + '15' }
+                  ]}
+                >
                   <View style={styles.habitLeft}>
                     <View style={[styles.habitColorDot, { backgroundColor: activity.color }]} />
                     <View style={styles.habitTextContainer}>
-                      <Text style={[styles.habitTitle, { color: activity.color }]}>
+                      <Text style={[styles.habitTitle, { color: colors.text }]}>
                         {activity.title}
                       </Text>
-                      <Text style={styles.habitTime}>{activity.description}</Text>
+                      <Text style={[styles.habitTime, { color: colors.textSecondary || '#666' }]}>
+                        {activity.description}
+                      </Text>
                     </View>
                   </View>
                 </View>
               ))
             ) : (
-              <Text style={styles.noActivityText}>no date</Text>
+              <Text style={[styles.noActivityText, { color: colors.textSecondary || '#666' }]}>
+                no date
+              </Text>
             )}
             <TouchableOpacity
-              style={styles.closeButton}
+              style={[styles.closeButton, { backgroundColor: 'tomato' }]}
               onPress={() => setBottomSheetVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={[styles.closeButtonText, { color: '#fff' }]}>Close</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -188,15 +222,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8
   },
-  todayHighlight: {
-    backgroundColor: 'gray'
-  },
   dayText: {
     fontSize: 16
-  },
-  todayText: {
-    color: 'white',
-    fontWeight: 'bold'
   },
   dotContainer: {
     flexDirection: 'row',
@@ -219,7 +246,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'center'
   },
-  // CalendarScreen の Habit 表示スタイルと同一にする
   habitItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -242,17 +268,14 @@ const styles = StyleSheet.create({
   },
   habitTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#000'
+    fontWeight: '500'
   },
   habitTime: {
-    fontSize: 12,
-    color: '#666'
+    fontSize: 12
   },
   noActivityText: {
     marginTop: 8,
     fontSize: 14,
-    color: '#666',
     textAlign: 'center'
   },
   modalOverlay: {
@@ -262,7 +285,6 @@ const styles = StyleSheet.create({
   },
   bottomSheetContainer: {
     height: height * 0.5,
-    backgroundColor: '#fff',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 16
@@ -275,7 +297,6 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 20,
     alignSelf: 'flex-end',
-    backgroundColor: 'tomato',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8

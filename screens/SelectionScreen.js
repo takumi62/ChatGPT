@@ -1,19 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../constants';
+import { useTheme } from '../themes/ThemeProvider';
 
 const SelectionScreen = ({ navigation }) => {
+    const { colors } = useTheme();
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: colors.background}]}>
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: COLORS.primary }]}
+                style={[styles.button, { backgroundColor: colors.primary }]}
                 onPress={() => navigation.navigate('GoalSetting')}
             >
                 <Text style={[styles.buttonText, { color: COLORS.white }]}>Setting goals</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: COLORS.primary }]}
+                style={[styles.button, { backgroundColor: colors.primary }]}
                 onPress={() => navigation.navigate('HabitSetting')}
             >
                 <Text style={[styles.buttonText, { color: COLORS.white }]}>Setting habits</Text>
