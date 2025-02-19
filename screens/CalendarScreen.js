@@ -129,7 +129,7 @@ const CalendarScreen = ({ navigation }) => {
                   style={[
                     styles.dayText,
                     { color: colors.text },
-                    isSelected && { color: colors.text, fontWeight: 'bold' }
+                    isSelected && { color: "white", fontWeight: 'bold' }
                   ]}
                 >
                   {dayNumber}

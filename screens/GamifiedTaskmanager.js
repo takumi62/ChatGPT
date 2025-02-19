@@ -1,53 +1,101 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Image,
+  Alert,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../themes/ThemeProvider';
 
 const GamifiedTaskmanager = () => {
-    const { colors } = useTheme();
+  const [image, setImage] = useState(null);
+  const { colors } = useTheme();
+
+  // ライブラリから画像を選択する関数のみ残す
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Sorry, we need media library permissions to make this work!');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    // expo-image-pickerのバージョンによってcancelled or canceledが異なる
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container} backgroundColor={colors.background}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView>
+        {/* Header / Avatar */}
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
-            <View style={styles.avatar} />
+            {/* アバター表示 */}
+            {image ? (
+              <Image source={{ uri: image }} style={styles.avatar} />
+            ) : (
+              <View style={[styles.avatar, styles.avatarPlaceholder]}>
+              <TouchableOpacity
+                onPress={pickImage}
+              >
+                <Ionicons name="image-outline" style={styles.userIcon} />
+              </TouchableOpacity>
+              </View>
+            )}
+
             <View style={styles.levelBadge}>
               <Text style={styles.levelText}>Lv. 1</Text>
             </View>
           </View>
-          <Text style={styles.username}>@user</Text>
-          <Text style={styles.xpText}>872 / 1000 XP</Text>
+
+          <Text style={[styles.username, { color: colors.text }]}>@user</Text>
+          <Text style={[styles.xpText, { color: colors.text }]}>872 / 1000 XP</Text>
         </View>
 
+        {/* Stats */}
         <View style={styles.statsContainer}>
-          <View style={styles.statCard} backgroundColor="rgba(217, 119, 6, 0.15)">
+          <View style={[styles.statCard, { backgroundColor: 'rgba(217, 119, 6, 0.15)' }]}>
             <Ionicons name="trophy" size={24} color="#d97706" />
-            <Text style={[styles.statValue, {color: colors.text}]}>15</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>15</Text>
             <Text style={styles.statLabel}>Goals Completed</Text>
           </View>
-          <View style={styles.statCard} backgroundColor="rgba(234, 88, 12, 0.15)">
+          <View style={[styles.statCard, { backgroundColor: 'rgba(234, 88, 12, 0.15)' }]}>
             <Ionicons name="calendar" size={24} color="#ea580c" />
-            <Text style={[styles.statValue, {color: colors.text}]}>5</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>5</Text>
             <Text style={styles.statLabel}>Habits Formed</Text>
           </View>
-          <View style={styles.statCard} backgroundColor="rgba(8, 145, 178, 0.15)">
+          <View style={[styles.statCard, { backgroundColor: 'rgba(8, 145, 178, 0.15)' }]}>
             <Ionicons name="star" size={24} color="#0891b2" />
-            <Text style={[styles.statValue, {color: colors.text}]}>872</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>872</Text>
             <Text style={styles.statLabel}>Total Points</Text>
           </View>
         </View>
 
+        {/* Achievements */}
         <View style={styles.achievementsContainer}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>Achievements</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Achievements</Text>
           <View style={styles.achievementsList}>
             {[1, 2, 3].map((i) => (
-              <View key={i} style={styles.achievementCard} backgroundColor= {colors.card}>
+              <View key={i} style={[styles.achievementCard, { backgroundColor: colors.card }]}>
                 <View style={styles.achievementIcon}>
                   <Ionicons name="ribbon" size={24} color="#6b7280" />
                 </View>
-                <Text style={[styles.achievementTitle, {color: colors.text}]}>Achievement {i}</Text>
-                <Text style={[styles.achievementDesc, {color: colors.text}]}>Locked</Text>
+                <Text style={[styles.achievementTitle, { color: colors.text }]}>
+                  Achievement {i}
+                </Text>
+                <Text style={[styles.achievementDesc, { color: colors.text }]}>Locked</Text>
               </View>
             ))}
           </View>
@@ -55,7 +103,7 @@ const GamifiedTaskmanager = () => {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -75,6 +123,30 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: '#e5e5e5',
   },
+  avatarPlaceholder: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userIcon: {
+    fontSize: 50,
+    color: '#6b7280',
+  },
+  overlayIcons: {
+    position: 'absolute',
+    bottom: 0,
+    left: '50%',
+    transform: [{ translateX: -50 }],
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#374151',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   levelBadge: {
     position: 'absolute',
     bottom: 0,
@@ -92,7 +164,6 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#374151',
     marginBottom: 4,
   },
   xpText: {
